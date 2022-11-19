@@ -9,6 +9,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 SONG_COUNT_PER_PAGE = 50
 
 chrome_options = webdriver.ChromeOptions()
+chrome_options.headless = True
+
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 # TODO: Argument로 빼기
