@@ -1,4 +1,5 @@
 import argparse
+import csv
 import json
 import requests
 import time
@@ -13,7 +14,7 @@ PROG_VERSION = '1.0'
 
 
 # 기본값 -> Genre (발라드)
-def __extract_song_ids(keyword: str, section: str, genre = 'GN0101'):
+def __extract_song_ids(keyword: str, section: str, genre: str):
     print(f'[START] 멜론 곡 ID 목록 추출 (키워드: [{keyword}], 방법: [{section}], 장르: [{genre}])')
 
     # 검색 결과 페이지당 결과 수
@@ -111,28 +112,48 @@ def __scrap_song_details(song_ids: List[str]):
     return songs
 
 
-def __save_songs_to_json(filepath: str):
-    print(f'[START] 검색 결과를 JSON 파일로 저장 [경로: {filepath}]')
+def __save_songs_to_file(songs: list, filename: str, format: str):
+    filepath = f'./{filename}.{format}'
+    print(f'[START] 검색 결과를 파일로 저장 [경로: {filepath}]')
 
-    with open(filepath, 'w', encoding='utf-8') as outfile:
-        json.dump(songs, outfile, indent=4)
+    if format == 'json':
+        with open(filepath, 'w', encoding='utf-8') as outfile:
+            json.dump(songs, outfile, indent=4)
+
+    elif format == 'csv':
+        with open(filepath, 'w', encoding='utf-8') as outfile:
+            writer = csv.DictWriter(outfile, fieldnames=['id', 'title', 'artist', 'lyric', 'url'])
+            writer.writeheader()
+            writer.writerows(songs)
+    else:
+        raise Exception('파일 형식(format) 오류')
     
-    print('[END] JSON 파일 생성 완료\n')
+    print('[END] 파일 생성 완료\n')
 
 
 if __name__ == '__main__':
     # Init argument parser
     parser = argparse.ArgumentParser(prog='Melon Ballad Lyric Scrapper')
     parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + PROG_VERSION)
-    # TODO: 장르(예. 발라드 등) 추가
     parser.add_argument('keyword', help='검색 키워드')
-    parser.add_argument('-s', '--section', help='검색 방법 (all: 전체, artist: 아티스트명, song: 곡명(기본값), album: 앨범명)', choices=['all', 'artist', 'song', 'album'], default='song')
-    # TODO: CSV 저장 추가
+    parser.add_argument('-s', '--section', help='검색 방법 [all: 전체, artist: 아티스트명, song: 곡명(기본값), album: 앨범명]', choices=['all', 'artist', 'song', 'album'], default='song')
+    # TODO: 장르 (-g, --genre) 추가
+    parser.add_argument('-o', '--output', help='결과 출력 형식 [csv(기본값), json]', choices=['csv', 'json'], default='csv')
     
     args = parser.parse_args()
     keyword = args.keyword
     section = args.section
+    # 발라드
+    genre = 'GN0101'
+    output_format = args.output
+    print(f'검색 키워드: [{keyword}], 검색 방법: [{section}], 장르: [{genre}], 출력 형식: [{output_format}]\n')
 
-    song_ids = __extract_song_ids(keyword=keyword, section=section)
+    # 1. 곡 ID 추출
+    song_ids = __extract_song_ids(keyword=keyword, section=section, genre=genre)
+
+    # 2. 곡 세부 정보 (곡명, 아티스트명, 가사) 추출
     songs = __scrap_song_details(song_ids=song_ids)
-    __save_songs_to_json(f'./output_{keyword}_{section}.json')
+    # TODO: 가사가 없거나, 중복된 가사 제거?
+
+    # 3. 파일로 저장
+    __save_songs_to_file(songs=songs, filename=f'output_{keyword}_{section}', format=output_format)
