@@ -42,7 +42,7 @@ while True:
     
     print('페이지', page + 1, '완료')
 
-    if song_ids % 50 != 0:
+    if len(song_ids) % 50 != 0:
         break
     else:
         page += 1
@@ -88,5 +88,5 @@ for song_id in song_ids:
         'url': url
     })
 
-with open('./output.json', 'w', encoding='utf-8') as outfile:
+with open(f'./output_{song_title}.json', 'w', encoding='utf-8') as outfile:
     json.dump(songs, outfile, indent=4)
