@@ -10,7 +10,7 @@ from typing import List
 from webdriver_manager.chrome import ChromeDriverManager
 
 # Constants
-PROG_VERSION = '1.0'
+PROG_VERSION = '1.1'
 
 
 # TODO: 멜론은 제대로 검색되지 않는 문제가 있음. (예. "가을"을 검색하면 "가을이", "가을에" 이런 것들 검색 안됨.)
