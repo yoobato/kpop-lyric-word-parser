@@ -14,6 +14,7 @@ PROG_VERSION = '1.0'
 
 
 # TODO: 멜론은 제대로 검색되지 않는 문제가 있음. (예. "가을"을 검색하면 "가을이", "가을에" 이런 것들 검색 안됨.)
+# TODO: 따라서 이와 같이 여러개를 검색해야 함 -> 가을, 가을과, 가을에, 가을은, 가을을, 가을의, 가을이
 def __extract_song_ids(keyword: str, section: str, genre: str):
     print(f'[START] 멜론 곡 ID 목록 추출 (키워드: [{keyword}], 방법: [{section}], 장르: [{genre}])')
 
@@ -156,4 +157,4 @@ if __name__ == '__main__':
     # TODO: 가사가 없거나, 중복된 가사 제거?
 
     # 3. 파일로 저장
-    __save_songs_to_file(songs=songs, filename=f'output_{keyword}_{section}', format=output_format)
+    __save_songs_to_file(songs=songs, filename=f'output_{keyword}_{section}_{genre}', format=output_format)
