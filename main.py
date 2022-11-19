@@ -18,11 +18,15 @@ song_title = '가을'
 song_section = 'song'   # 곡명으로 검색
 song_genre = 'GN0101'   # 발라드
 
+print(f'멜론에서 제목에 "{song_title}"이 들어간 발라드 장르 노래들의 가사를 파싱합니다.')
 
 song_ids = []
 
+print('[START] 멜론 곡명 검색 결과 페이지로부터 song_id 파싱')
 page = 0
 while True:
+    print(f'  페이지 {page} ...', end=' ')
+
     start_index = page * SONG_COUNT_PER_PAGE + 1
 
     url = f'https://www.melon.com/search/song/index.htm?q={song_title}&section={song_section}&searchGnbYn=Y&kkoSpl=N#params%5Bq%5D={song_title}&params%5Bsort%5D=ganada&params%5Bsection%5D={song_section}&params%5BgenreDir%5D={song_genre}&params%5BmwkLogType%5D=T&po=pageObj&startIndex={start_index}'
@@ -42,7 +46,7 @@ while True:
         except:
             continue
     
-    print('페이지', page + 1, '완료')
+    print('완료')
 
     if len(song_ids) % 50 != 0:
         break
@@ -50,7 +54,7 @@ while True:
         page += 1
 
 driver.close()
-
+print(f'[END] 멜론 곡명 검색 결과 페이지로부터 song_id 파싱 (총 {len(song_ids)}곡)')
 
 http_headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
@@ -58,8 +62,8 @@ http_headers = {
     'Pragma': 'no-cache'
 }
 
+print('[START] 곡 상세 페이지(song_id 이용)에서 노래 가사 파싱')
 songs = []
-
 for song_id in song_ids:
     url = f'https://www.melon.com/song/detail.htm?songId={song_id}'
     page_html = requests.get(url, headers=http_headers).text
@@ -90,5 +94,10 @@ for song_id in song_ids:
         'url': url
     })
 
+print('[END] 곡 상세 페이지(song_id 이용)에서 노래 가사 파싱')
+
+print('[START] 결과 파일 생성')
 with open(f'./output_{song_title}.json', 'w', encoding='utf-8') as outfile:
     json.dump(songs, outfile, indent=4)
+
+print('END] 결과 파일 생성')
