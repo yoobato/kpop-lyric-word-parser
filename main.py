@@ -13,7 +13,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 PROG_VERSION = '1.0'
 
 
-# 기본값 -> Genre (발라드)
+# TODO: 멜론은 제대로 검색되지 않는 문제가 있음. (예. "가을"을 검색하면 "가을이", "가을에" 이런 것들 검색 안됨.)
 def __extract_song_ids(keyword: str, section: str, genre: str):
     print(f'[START] 멜론 곡 ID 목록 추출 (키워드: [{keyword}], 방법: [{section}], 장르: [{genre}])')
 
