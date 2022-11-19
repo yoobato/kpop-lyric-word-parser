@@ -1,18 +1,26 @@
-# kpop-lyric-word-parser
-Uniquely parse the words in K-pop music lyrics
+# Melon Lyric Scraper
+Scraps song details from Melon(K-pop music) with Keyword
+- Options
+  - Search keyword
+  - Search by **artist name**, **song title**, **album name**, or **all**
+  - Output format either **CSV** or **JSON**
 
-- main.py : 멜론에서 곡 제목을 검색한 다음에 나오는 전체 곡 가사 크롤링
-- one.py : 멜론에서 곡 제목을 검색한 다음에 나오는 첫번째 곡 가사 크롤링
 
-### Get Started
+## Get Started
 ```sh
-# main.py 혹은 one.py 안의 검색조건 변수값 수정
+python main.py {SearchKeyword} -s {SearchFilter} -o {OutputFormat}
+# For more information, type "python main.py -h"
 
-python main.py
-# Or
-python one.py
+# Ex) Get songs with the word "가을" exists in song title and output as json file.
+python main.py 가을 -s song -o json
 ```
 
-### TODO
-- requirements.txt 가 완벽하지 않음.
-  - venv, pipenv 등으로 교체 필요
+
+## TODO
+- Add Genre filter (currently only Ballad(GN0101) is supported.)
+- Validate `requirements.txt`
+- Use `venv`, `pipenv`, or somthing like that
+
+
+## Special Thanks to
+- :woman_teacher:	[@chum.my](https://www.instagram.com/chum.my/)

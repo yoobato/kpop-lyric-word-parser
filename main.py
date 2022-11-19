@@ -133,7 +133,7 @@ def __save_songs_to_file(songs: list, filename: str, format: str):
 
 if __name__ == '__main__':
     # Init argument parser
-    parser = argparse.ArgumentParser(prog='Melon Ballad Lyric Scrapper')
+    parser = argparse.ArgumentParser(prog='Melon Lyric Scraper')
     parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + PROG_VERSION)
     parser.add_argument('keyword', help='검색 키워드')
     parser.add_argument('-s', '--section', help='검색 방법 [all: 전체, artist: 아티스트명, song: 곡명(기본값), album: 앨범명]', choices=['all', 'artist', 'song', 'album'], default='song')
